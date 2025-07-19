@@ -1,0 +1,108 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    string name;
+    Node* left;
+    Node* right;
+
+    Node(string n) {
+        name = n;
+        left = nullptr;
+        right = nullptr;
+    }
+};
+
+class BST {
+private:
+    Node* root;
+
+    Node* insert(Node* current, string name) {
+        if (current == nullptr) {
+            return new Node(name);
+        }
+
+        if (name < current->name) {
+            current->left = insert(current->left, name);
+        } else if (name > current->name) {
+            current->right = insert(current->right, name);
+        }
+        return current;
+    }
+
+    void inorder(Node* current) {
+        if (current != nullptr) {
+            inorder(current->left);
+            cout << current->name << " ";
+            inorder(current->right);
+        }
+    }
+
+    void preorder(Node* current) {
+        if (current != nullptr) {
+            cout << current->name << " ";
+            preorder(current->left);
+            preorder(current->right);
+        }
+    }
+
+    void postorder(Node* current) {
+        if (current != nullptr) {
+            postorder(current->left);
+            postorder(current->right);
+            cout << current->name << " ";
+        }
+    }
+
+public:
+    BST() {
+        root = nullptr;
+    }
+
+    void insert(string name) {
+        root = insert(root, name);
+    }
+
+    void display_inorder() {
+        cout << "In-order   : ";
+        inorder(root);
+        cout << endl;
+    }
+
+    void display_preorder() {
+        cout << "Pre-order  : ";
+        preorder(root);
+        cout << endl;
+    }
+
+    void display_postorder() {
+        cout << "Post-order : ";
+        postorder(root);
+        cout << endl;
+    }
+};
+
+int main() {
+    BST tree;
+
+    tree.insert("D");
+    tree.insert("B");
+    tree.insert("A");
+    tree.insert("C");
+    tree.insert("F");
+    tree.insert("E");
+    tree.insert("G");
+
+    tree.display_inorder();    
+    tree.display_preorder();  
+    tree.display_postorder(); 
+
+    return 0;
+}
+
+/* Expected output:
+In-order   : A B C D E F G 
+Pre-order  : D B A C F E G 
+Post-order : A C B E G F D 
+*/
