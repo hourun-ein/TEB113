@@ -1,0 +1,81 @@
+#include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <queue>
+#include <set>
+using namespace std;
+
+class Graph {
+private:
+    unordered_map<char, vector<char>> adj;
+
+public:
+    void addEdge(char u, char v) {
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    void dfs(char start, set<char>& visited) {
+        visited.insert(start);
+        cout << start << " ";
+        for (char neighbor : adj[start]) {
+            if (visited.find(neighbor) == visited.end()) {
+                dfs(neighbor, visited);
+            }
+        }
+    }
+
+    void bfs(char start) {
+        set<char> visited;
+        queue<char> q;
+        q.push(start);
+        visited.insert(start);
+
+        while (!q.empty()) {
+            char current = q.front();
+            q.pop();
+            cout << current << " ";
+
+            for (char neighbor : adj[current]) {
+                if (visited.find(neighbor) == visited.end()) {
+                    visited.insert(neighbor);
+                    q.push(neighbor);
+                }
+            }
+        }
+    }
+
+    void printGraph() {
+        cout << "Adjacency List:\n";
+        for (auto& pair : adj) {
+            cout << pair.first << ": ";
+            for (char neighbor : pair.second) {
+                cout << neighbor << " ";
+            }
+            cout << "\n";
+        }
+    }
+};
+
+int main() {
+    Graph g;
+
+    g.addEdge('A', 'B');
+    g.addEdge('B', 'E');
+    g.addEdge('A', 'D');
+    g.addEdge('A', 'C');
+    g.addEdge('C', 'D');
+    g.addEdge('D', 'E');
+    g.addEdge('B', 'D');
+
+    g.printGraph();
+
+    cout << "\nDFS Traversal from A:\n";
+    set<char> visited;
+    g.dfs('A', visited);
+
+    cout << "\n\nBFS Traversal from A:\n";
+    g.bfs('A');
+
+    return 0;
+}
